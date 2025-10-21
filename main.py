@@ -8,7 +8,7 @@ from routes import router
 logger = get_logger(__name__)
 
 Base.metadata.create_all(bind=engine)
-app = FastAPI()
+app = FastAPI(title="String Analysis API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,6 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.middleware("http")(add_request_id_and_process_time)
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the String Analysis API"}
