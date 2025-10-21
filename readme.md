@@ -27,7 +27,13 @@ A RESTFUL FastAPI service that stores and analyzes strings. It computes properti
 - Python 3.10 or newer
 - A running database (Postgres recommended) or SQLite for local/dev
 - Git (optional)
+## Setting-up
+Clone the repositry
+```bash
+git clone https://github.com/Mr-kings042/HNG_string_analyser_api.git
 
+cd HNG_string_analyser_api
+```
 ## Install dependencies
 
 Create a virtual environment and install required packages:
