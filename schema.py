@@ -24,4 +24,4 @@ class StringResponse(BaseModel):
     properties: StringProperties
     created_at: str
     class Config:
-        from_attributes = True
+        orm_mode = True
