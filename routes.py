@@ -46,6 +46,9 @@ def filter_strings(
         return filtered_strings
     except HTTPException as e:
         logger.error(f"Error filtering strings: {str(e)}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error filtering strings: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
 @router.get("/filter-by-natural-language", status_code=status.HTTP_200_OK)
 def filter_by_natural_language(query: str, db: Session = Depends(get_db)):
@@ -77,11 +80,11 @@ def read_string(string_value: str, db: Session = Depends(get_db)):
         logger.error(f"Error fetching string: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
 
-@router.get("/strings/all", response_model=list[StringResponse], status_code=status.HTTP_200_OK)
-async def get_all_strings(db: Session = Depends(get_db)):
-    """Retrieve all string."""
-    logger.info("Fetching all strings")
-    return await string_service.get_all_strings(db)
+# @router.get("/strings/all", response_model=list[StringResponse], status_code=status.HTTP_200_OK)
+# async def get_all_strings(db: Session = Depends(get_db)):
+#     """Retrieve all string."""
+#     logger.info("Fetching all strings")
+#     return await string_service.get_all_strings(db)
 
 
 @router.delete("/{string_value}", status_code=status.HTTP_204_NO_CONTENT)

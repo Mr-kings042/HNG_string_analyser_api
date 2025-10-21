@@ -22,5 +22,5 @@ app.middleware("http")(add_request_id_and_process_time)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the String Analysis API"}
-app.include_router(router,prefix="/strings", tags=["strings API"])
+app.include_router(router, prefix="/strings", tags=["strings API"])
 

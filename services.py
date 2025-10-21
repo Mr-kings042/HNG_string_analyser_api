@@ -1,6 +1,7 @@
 import re
 from typing import Any, Dict, List, Optional
 from fastapi.encoders import jsonable_encoder
+from fastapi import status
 import hashlib
 from collections import Counter
 from datetime import datetime, timezone
@@ -37,15 +38,15 @@ class StringService:
     @staticmethod
     def create_string_analysis(db: Session, text: StringCreate) -> StringResponse:
         # Check for missing values
-        if not text.value.strip():
-            logger.error("String value is required")
-            raise HTTPException(status_code=400, detail="String value is required")
         if not isinstance(text.value, str):
             logger.error("String value must be a string")
-            raise HTTPException(status_code=400, detail="String value must be a string")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="String value must be a string")
+        if not text.value.strip():
+            logger.error("String value is required")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="String value is required")
         existing_entry = db.query(Strings).filter(Strings.value == text.value).first()
         if existing_entry:
-            raise HTTPException(status_code= 409, detail="String already exists")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="String already exists")
         properties = StringService.analyze_string(text.value)
 
         string_entry = Strings(
@@ -277,7 +278,7 @@ class StringService:
     def delete_string(db: Session, string_value: str) -> None:
         string_entry = db.query(Strings).filter(Strings.value == string_value).first()
         if not string_entry:
-            raise HTTPException(status_code=404, detail="String not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="String not found")
         db.delete(string_entry)
         db.flush()
         logger.info(f"String with value '{string_value}' deleted successfully.")
